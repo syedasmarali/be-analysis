@@ -60,9 +60,9 @@ with st.sidebar.expander("Enter Guacamole Recipe Ingredients", expanded=False):
 st.sidebar.header("Guacamole Per Day Demand")
 with st.sidebar.expander("Enter Guacamole Per Day Demand", expanded=False):
     # Enter recipe demand
-    thai_demand = st.number_input('Thai Guacamole Per Day Demand', min_value=0, max_value=100, value=15)
-    kid_demand = st.number_input('Kid Friendly Guacamole Per Day Demand', min_value=0, max_value=100, value=28)
-    fiery_demand = st.number_input('Fiery Guacamole Per Day Demand', min_value=0, max_value=100, value=7)
+    thai_demand = st.number_input('Thai Guacamole Per Day Demand', min_value=0, max_value=1000, value=15)
+    kid_demand = st.number_input('Kid Friendly Guacamole Per Day Demand', min_value=0, max_value=1000, value=28)
+    fiery_demand = st.number_input('Fiery Guacamole Per Day Demand', min_value=0, max_value=1000, value=7)
     thai_monthly_demand = thai_demand * 30
     kid_monthly_demand = kid_demand * 30
     fiery_monthly_demand = fiery_demand * 30
