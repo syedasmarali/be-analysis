@@ -1,0 +1,51 @@
+Product-ID;Product;Unit;Supplier;Quantity;Price per Quantity;Price per Unit;Date of Offer
+10001;Avocado;PCS;Vegpower;1;1,7;1,7000;8.7.2021
+10001;Avocado;PCS;Vegpower;1;1,75;1,7500;9.10.2021
+10001;Avocado;PCS;Vegpower;1;1,65;1,6500;10.2.2021
+10002;Lime;PCS;Vegpower;1;0,4;0,4000;9.6.2021
+10002;Lime;PCS;Vegpower;1;0,45;0,4500;9.30.2021
+10002;Lime;PCS;Tropicana;1;0,47;0,4700;10.1.2021
+10003;Red Chili;G;Lemberg;100;3;0,0300;8.8.2021
+10004;Onion;G;Lemberg;1000;2,5;0,0025;8.8.2021
+10005;Coriander;G;Lemberg;100;1,2;0,0120;8.8.2021
+10006;Mayonnaise;G;Lemberg;100;2,15;0,0215;8.8.2021
+10007;Tomato;G;Lemberg;1000;3,5;0,0035;8.8.2021
+10008;Garlic;G;Lemberg;1000;11;0,0110;8.8.2021
+10009;Jalapeno Chili;G;Lemberg;100;1,45;0,0145;8.8.2021
+10010;Tabasco;ML;Lemberg;150;4,99;0,0333;8.8.2021
+10010;Tabasco;ML;Hottiest;100;4,4;0,0440;9.9.2021
+10010;Tabasco;ML;Mamamia;100;4,3;0,0430;10.3.2021
+10001;Avocado;PCS;Vegpower;1;1,7;1,7000;07.08.2021
+10001;Avocado;PCS;Vegpower;1;1,75;1,7500;10.09.2021
+10001;Avocado;PCS;Vegpower;1;1,65;1,6500;02.10.2021
+10002;Lime;PCS;Vegpower;1;0,4;0,4000;06.09.2021
+10002;Lime;PCS;Vegpower;1;0,45;0,4500;30.09.2021
+10002;Lime;PCS;Tropicana;1;0,47;0,4700;01.10.2021
+10003;Red Chili;G;Lemberg;100;3;0,0300;08.08.2021
+10004;Onion;G;Lemberg;1000;2,5;0,0025;08.08.2021
+10005;Coriander;G;Lemberg;100;1,2;0,0120;08.08.2021
+10006;Mayonnaise;G;Lemberg;100;2,15;0,0215;08.08.2021
+10007;Tomato;G;Lemberg;1000;3,5;0,0035;08.08.2021
+10008;Garlic;G;Lemberg;1000;11;0,0110;08.08.2021
+10009;Jalapeno Chili;G;Lemberg;100;1,45;0,0145;08.08.2021
+10010;Tabasco;ML;Lemberg;150;4,99;0,0333;08.08.2021
+10010;Tabasco;ML;Hottiest;100;4,4;0,0440;09.09.2021
+10010;Tabasco;ML;Mamamia;100;4,3;0,0430;03.10.2021
+10001;Avocado;PCS;Vegpower;1;1,72;1,7200;8.8.2021
+10001;Avocado;PCS;Vegpower;1;1,7;1,7000;8.27.2021
+10001;Avocado;PCS;Vegpower;1;1,75;1,7500;9.10.2021
+10001;Avocado;PCS;Vegpower;1;1,65;1,6500;10.2.2021
+10002;Lime;PCS;Vegpower;1;0,4;0,4000;9.6.2021
+10002;Lime;PCS;Vegpower;1;0,45;0,4500;9.30.2021
+10002;Lime;PCS;Tropicana;1;0,47;0,4700;10.1.2021
+10003;Red Chili;G;Lemberg;100;3;0,0300;8.8.2021
+10004;Onion;G;Lemberg;1000;2,5;0,0025;8.8.2021
+10005;Coriander;G;Lemberg;100;1,2;0,0120;8.8.2021
+10006;Mayonnaise;G;Lemberg;100;2,15;0,0215;8.8.2021
+10007;Tomato;G;Lemberg;1000;3,5;0,0035;8.8.2021
+10008;Garlic;G;Lemberg;1000;11;0,0110;8.8.2021
+10009;Jalapeno Chili;G;Lemberg;100;3,45;0,0345;8.8.2021
+10010;Tabasco;ML;Lemberg;150;5,99;0,0399;8.8.2021
+10010;Tabasco;ML;Hottiest;100;5,4;0,0540;9.9.2021
+10010;Tabasco;ML;Mamamia;100;5,3;0,0530;10.3.2021
+10002;Lime;PCS;Vegpower;1;0,46;0,4600;8.9.2021

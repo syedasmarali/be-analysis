@@ -1,0 +1,7 @@
+# Ignore virtual environments
+.venv/
+venv
+
+# Ignore IDE settings
+.idea/
+.DS_Store
