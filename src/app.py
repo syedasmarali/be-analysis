@@ -566,7 +566,7 @@ profit = round(total_monthly_revenue - total_cost,2)
 col1, col2, col3 = st.columns(3)
 col1.metric("Total Revenue", f"{total_monthly_revenue / 1000:.1f}k")
 col2.metric("Total Cost", f"{total_cost / 1000:.1f}k")
-col3.metric("Total Revenue", f"{profit / 1000:.1f}k")
+col3.metric("Profit", f"{profit / 1000:.1f}k")
 
 # Chart for total cost revenue and profit
 data = [
@@ -708,6 +708,159 @@ with col1:
     st.plotly_chart(fig)
 
 # Calculate the variable cost per unit for kfg
+with col2:
+    st.markdown("<h5 style='text-align: center;'>Kid Friendly Guacamole</h5>", unsafe_allow_html=True)
+    unit_vc_kfg = round((total_variable_cost / 3) / kid_monthly_demand, 2)
+    st.metric(label='Avg. Unit Variable Cost', value=unit_vc_kfg)
+    st.metric(label='Price', value=selling_price_kid_guacamole)
+    st.metric(label='Avg. Fixed Cost', value=round(total_fixed_cost/3,2))
 
+    # Create df
+    units = [0, 100, 200, 300, 400, 500, 600, 700, 800 ,900, 1000, 1100, 1200]
+    df_thai_kfg = pd.DataFrame({
+        'Units': units
+    })
+    df_thai_kfg['Price'] = selling_price_kid_guacamole
+    df_thai_kfg['VC per Unit'] = unit_vc_kfg
+    df_thai_kfg['Total VC'] = df_thai_kfg['Units'] * df_thai_kfg['VC per Unit']
+    df_thai_kfg['Fixed Cost'] = round(total_fixed_cost/3,2)
+    df_thai_kfg['Total Cost'] = df_thai_kfg['Fixed Cost'] + df_thai_kfg['Total VC']
+    df_thai_kfg['Total Revenue'] = df_thai_kfg['Units'] * df_thai_kfg['Price']
+    df_thai_kfg['Profit/Loss'] = df_thai_kfg['Total Revenue'] - df_thai_kfg['Total Cost']
+    df_thai_kfg['BE Units'] = round(df_thai_kfg['Fixed Cost']/(df_thai_kfg['Price']-df_thai_kfg['VC per Unit']),0)
+
+    # Create chart
+    # Create traces using DataFrame
+    cost_trace = go.Scatter(
+        x=df_thai_kfg['Units'],
+        y=df_thai_kfg['Total Cost'],
+        mode='lines',
+        name='Total Cost',
+        line=dict(color='red')
+    )
+
+    revenue_trace = go.Scatter(
+        x=df_thai_kfg['Units'],
+        y=df_thai_kfg['Total Revenue'],
+        mode='lines',
+        name='Total Revenue',
+        line=dict(color='green')
+    )
+
+    # Break-even point
+    break_even_x = df_thai_kfg['BE Units'].mean()
+    break_even_y = df_thai_kfg['Total Cost'][df_thai_kfg['Units'].idxmax()]
+
+    # Create a layout
+    layout = go.Layout(
+        title='Break-even Analysis',
+        xaxis=dict(title='Units Sold'),
+        yaxis=dict(title='EUR'),
+        showlegend=True
+    )
+
+    # Create a figure
+    fig = go.Figure(data=[cost_trace, revenue_trace], layout=layout)
+
+    # Add break-even line
+    fig.add_trace(go.Scatter(
+        x=[break_even_x, break_even_x],
+        y=[0, break_even_y],
+        mode='lines',
+        name='Break-even line',
+        line=dict(color='blue', dash='dash')
+    ))
+
+    # Add break-even value annotation
+    fig.add_annotation(
+        x=break_even_x,
+        y=break_even_y,
+        text=f'{int(break_even_x)}',
+        showarrow=True,
+        arrowhead=2,
+        ax=0,
+        ay=-40,  # Adjust vertical position
+        font=dict(color='blue')
+    )
+
+    # Show plot in Streamlit app
+    st.plotly_chart(fig)
 
 # Calculate the variable cost per unit for fg
+with col3:
+    st.markdown("<h5 style='text-align: center;'>Fiery Guacamole</h5>", unsafe_allow_html=True)
+    unit_vc_fg = round((total_variable_cost / 3) / fiery_monthly_demand, 2)
+    st.metric(label='Avg. Unit Variable Cost', value=unit_vc_fg)
+    st.metric(label='Price', value=selling_price_fiery_guacamole)
+    st.metric(label='Avg. Fixed Cost', value=round(total_fixed_cost/3,2))
+
+    # Create df
+    units = [0, 100, 200, 300, 400, 500, 600, 700, 800 ,900, 1000, 1100, 1200]
+    df_thai_fg = pd.DataFrame({
+        'Units': units
+    })
+    df_thai_fg['Price'] = selling_price_fiery_guacamole
+    df_thai_fg['VC per Unit'] = unit_vc_fg
+    df_thai_fg['Total VC'] = df_thai_fg['Units'] * df_thai_fg['VC per Unit']
+    df_thai_fg['Fixed Cost'] = round(total_fixed_cost/3,2)
+    df_thai_fg['Total Cost'] = df_thai_fg['Fixed Cost'] + df_thai_fg['Total VC']
+    df_thai_fg['Total Revenue'] = df_thai_fg['Units'] * df_thai_fg['Price']
+    df_thai_fg['Profit/Loss'] = df_thai_fg['Total Revenue'] - df_thai_fg['Total Cost']
+    df_thai_fg['BE Units'] = round(df_thai_fg['Fixed Cost']/(df_thai_fg['Price']-df_thai_fg['VC per Unit']),0)
+
+    # Create chart
+    # Create traces using DataFrame
+    cost_trace = go.Scatter(
+        x=df_thai_fg['Units'],
+        y=df_thai_fg['Total Cost'],
+        mode='lines',
+        name='Total Cost',
+        line=dict(color='red')
+    )
+
+    revenue_trace = go.Scatter(
+        x=df_thai_fg['Units'],
+        y=df_thai_fg['Total Revenue'],
+        mode='lines',
+        name='Total Revenue',
+        line=dict(color='green')
+    )
+
+    # Break-even point
+    break_even_x = df_thai_fg['BE Units'].mean()
+    break_even_y = df_thai_fg['Total Cost'][df_thai_fg['Units'].idxmax()]
+
+    # Create a layout
+    layout = go.Layout(
+        title='Break-even Analysis',
+        xaxis=dict(title='Units Sold'),
+        yaxis=dict(title='EUR'),
+        showlegend=True
+    )
+
+    # Create a figure
+    fig = go.Figure(data=[cost_trace, revenue_trace], layout=layout)
+
+    # Add break-even line
+    fig.add_trace(go.Scatter(
+        x=[break_even_x, break_even_x],
+        y=[0, break_even_y],
+        mode='lines',
+        name='Break-even line',
+        line=dict(color='blue', dash='dash')
+    ))
+
+    # Add break-even value annotation
+    fig.add_annotation(
+        x=break_even_x,
+        y=break_even_y,
+        text=f'{int(break_even_x)}',
+        showarrow=True,
+        arrowhead=2,
+        ax=0,
+        ay=-40,  # Adjust vertical position
+        font=dict(color='blue')
+    )
+
+    # Show plot in Streamlit app
+    st.plotly_chart(fig)
