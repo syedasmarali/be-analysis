@@ -69,7 +69,7 @@ with st.sidebar.expander("Enter Guacamole Per Day Demand", expanded=False):
 
 
 # Demand visualization
-st.markdown("<h2 style='text-align: center;'>Product Demand</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Product Demand 📌</h2>", unsafe_allow_html=True)
 thai_monthly_demand = thai_demand * 30
 kid_monthly_demand = kid_demand * 30
 fiery_monthly_demand = fiery_demand * 30
@@ -111,7 +111,7 @@ st.plotly_chart(fig)
 st.divider()
 
 # Ingredients demand
-st.markdown("<h2 style='text-align: center;'>Ingredients Demand</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Ingredients Demand 📋</h2>", unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
 
 # Demand for thai guacamole ingredients
@@ -307,7 +307,7 @@ with col3:
 st.divider()
 
 # Ingredients costing
-st.markdown("<h2 style='text-align: center;'>Ingredients Costing</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Ingredients Costing ฿</h2>", unsafe_allow_html=True)
 col1, col2 = st.columns(2)
 
 # Supplier table
@@ -352,16 +352,16 @@ with col2:
     tomato_price = result.loc[result['Product'] == 'Tomato', 'Price per Unit'].values[0]
 
     # Display the message using st.markdown
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Avocado: <span style='color: green;'>{avocado_price}</span></h5>", unsafe_allow_html=True)
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Coriander: <span style='color: green;'>{coriander_price}</span></h5>", unsafe_allow_html=True)
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Garlic: <span style='color: green;'>{garlic_price}</span></h5>", unsafe_allow_html=True)
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Jalapeno Chili: <span style='color: green;'>{jalapeno_chili_price}</span></h5>", unsafe_allow_html=True)
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Lime: <span style='color: green;'>{lime_price}</span></h5>", unsafe_allow_html=True)
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Mayonnaise: <span style='color: green;'>{mayonnaise_price}</span></h5>", unsafe_allow_html=True)
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Onion: <span style='color: green;'>{onion_price}</span></h5>", unsafe_allow_html=True)
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Red Chili: <span style='color: green;'>{red_chili_price}</span></h5>", unsafe_allow_html=True)
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Tabasco: <span style='color: green;'>{tabasco_price}</span></h5>", unsafe_allow_html=True)
-    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Tomato: <span style='color: green;'>{tomato_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Avocado 🥑: <span style='color: green;'>{avocado_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Coriander 🌱: <span style='color: green;'>{coriander_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Garlic 🧄: <span style='color: green;'>{garlic_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Jalapeno Chili 🫑: <span style='color: green;'>{jalapeno_chili_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Lime 🍋‍🟩: <span style='color: green;'>{lime_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Mayonnaise 🫙: <span style='color: green;'>{mayonnaise_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Onion 🧅: <span style='color: green;'>{onion_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Red Chili 🌶️: <span style='color: green;'>{red_chili_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Tabasco 🥫: <span style='color: green;'>{tabasco_price}</span></h5>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='text-align: center; color: black;'>Price of Tomato 🍅: <span style='color: green;'>{tomato_price}</span></h5>", unsafe_allow_html=True)
 
 # Cost of ingredients for producing Guacamole
 col1, col2, col3 = st.columns(3)
@@ -450,7 +450,7 @@ with st.sidebar.expander("Enter Guacamole Selling Prices", expanded=False):
     selling_price_fiery_guacamole = st.number_input('Fiery Guacamole Selling Price:', min_value=0.0, max_value=100.0, value=12.0)
 
 # Per month revenue
-st.markdown("<h2 style='text-align: center;'>Guacamole Revenue</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Guacamole Revenue ⛳️</h2>", unsafe_allow_html=True)
 monthly_revenue_thai_guacamole = round(selling_price_thai_guacamole * thai_monthly_demand, 2)
 monthly_revenue_kid_guacamole = round(selling_price_kid_guacamole * kid_monthly_demand, 2)
 monthly_revenue_fiery_guacamole = round(selling_price_fiery_guacamole * fiery_monthly_demand, 2)
@@ -497,6 +497,7 @@ with st.sidebar.expander("Enter Variable Costs", expanded=False):
     variable_other = st.number_input('Variable Food Other Costs:', min_value=0.00, max_value=100.00, value=2.75)
 
     # For thai guacamole recipe
+    st.info('TG: Thai Guacamole', icon="ℹ️")
     tg1 = st.number_input('TG1 mins.:', min_value=0, max_value=100, value=7,
                           help='TG: Thai Guacamole. Place avocados and lime or lemon juice in a medium bowl and roughly mash with a fork. Season to taste.')
     tg1s = st.number_input('TG1 sec.:', min_value=0, max_value=100, value=0,
@@ -511,6 +512,7 @@ with st.sidebar.expander("Enter Variable Costs", expanded=False):
     monthly_cooking_cost_tg = round(monthly_cooking_time_tg * (variable_salary + variable_energy + variable_other),2)
 
     # For kid friendly guacamole
+    st.info('KFG: Kid Friendly Guacamole', icon="ℹ️")
     kfg1 = st.number_input('KFG1 mins.:', min_value=0, max_value=100, value=7,
                           help='KFG: Kid Friendly Guacamole. Place avocados and lime or lemon juice in a medium bowl and mash with a fork. Season to taste.')
     kfg1s = st.number_input('KFG1 sec.:', min_value=0, max_value=100, value=25,
@@ -529,6 +531,7 @@ with st.sidebar.expander("Enter Variable Costs", expanded=False):
     monthly_cooking_cost_kfg = round(monthly_cooking_time_kfg * (variable_salary + variable_energy + variable_other),2)
 
     # For fiery guacamole
+    st.info('FG: Fiery Guacamole', icon="ℹ️")
     fg1 = st.number_input('FG1 mins.:', min_value=0, max_value=100, value=7,
                           help='FG: Fiery Guacamole. Place avocados and lime or lemon juice in a medium bowl and mash with a fork. Season to taste.')
     fg1s = st.number_input('FG1 sec.:', min_value=0, max_value=100, value=0,
@@ -547,7 +550,7 @@ with st.sidebar.expander("Enter Variable Costs", expanded=False):
     monthly_cooking_cost_fg = round(monthly_cooking_time_fg * (variable_salary + variable_energy + variable_other),2)
 
 # Financial analysis
-st.markdown("<h2 style='text-align: center;'>Financial Analysis</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Financial Analysis 💶</h2>", unsafe_allow_html=True)
 
 # Calculations
 data = [
@@ -623,7 +626,7 @@ st.plotly_chart(fig)
 st.divider()
 
 # BE analysis
-st.markdown("<h2 style='text-align: center;'>Break Even Analysis</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Break Even Analysis 📈</h2>", unsafe_allow_html=True)
 
 # 3 cols for each product
 col1, col2, col3 = st.columns(3)
