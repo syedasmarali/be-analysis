@@ -579,7 +579,7 @@ data = [
 df = pd.DataFrame(data)
 # Create a single gauge chart with multiple labels and values
 fig = go.Figure(go.Indicator(
-    mode="gauge+number+delta",
+    mode="gauge+number",
     value=profit,
     title={'text': "Profit"},
     delta={'reference': total_cost, 'relative': False},
