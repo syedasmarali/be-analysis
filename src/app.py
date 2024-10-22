@@ -3,6 +3,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import os
+import random
+from graphviz import Digraph
 
 def display_ingredient_cost(ingredient_quantity, ingredient_cost, ingredient_name, unit):
     ingredient_cost_recipe = float(ingredient_quantity) * float(ingredient_cost.replace(',', '.'))
@@ -866,3 +868,122 @@ with col3:
 
     # Show plot in Streamlit app
     st.plotly_chart(fig)
+
+# Add a divier
+st.divider()
+
+# BE analysis
+st.markdown("<h2 style='text-align: center;'>Calculation Flow</h2>", unsafe_allow_html=True)
+
+# Calculations
+be_tg_units = df_thai_be['BE Units'].mean()
+be_kfg_units = df_thai_kfg['BE Units'].mean()
+be_fg_units = df_thai_fg['BE Units'].mean()
+
+def random_color():
+    """Generate a random color in RGBA format."""
+    return f'rgba({random.randint(0, 255)}, {random.randint(0, 255)}, {random.randint(0, 255)}, 0.5)'
+
+# Create random colors for nodes
+node_colors = [random_color() for _ in range(60)]  # Adjusted to 20 nodes
+
+# Generate link colors based on their source node color
+source_indices = [9, 6, 5, 8, 7, 4, 0, 1, 2, 3, 3, 10, 10, 10, 13, 13, 14, 14, 14, 20, 21, 22, 23, 24,
+                  20, 21, 25, 26, 27, 20, 21, 28, 23, 29, 12, 12, 12]
+link_colors = [node_colors[source] for source in source_indices]
+
+# Create the Sankey diagram
+fig = go.Figure(data=[go.Sankey(
+    node=dict(
+        pad=15,
+        thickness=20,
+        line=dict(color="black", width=0.5),
+        label=[
+            'TG Revenue',  # 0
+            'KFG Revenue',  # 1
+            'FG Revenue',  # 2
+            'Total Revenue',  # 3
+            'TG Demand',  # 4
+            'KFG Demand',  # 5
+            'FG Demand',  # 6
+            'TG Selling Price',  # 7
+            'KFG Selling Price',  # 8
+            'FG Selling Price',  # 9
+            'Total Cost',  # 10
+            'Profit',  # 11
+            'Variable Cost',  # 12
+            'Fixed Cost',  # 13
+            'Ingredients Cost',  # 14
+            'Rent',  # 15
+            'Salary',  # 16
+            'FG Ingredients Cost',  # 17
+            'TG Ingredients Cost',  # 18
+            'KFG Ingredients Cost',  # 19
+            'Avocado', # 20
+            'Lime', # 21
+            'Red Chilli', # 22
+            'Onion', # 23
+            'Coriander', # 24
+            'Mayonnaise', # 25
+            'Tomato', # 26
+            'Garlic', # 27
+            'Jalapenos', # 28
+            'Tobasco', # 29
+            'TG Cooking Cost', # 30
+            'KFG Cooking Cost', # 31
+            'FG Cooking Cost', # 32
+            'TG BE Units', # 33
+            'KFG BE Units', # 34
+            'FG BE Units' # 35
+        ],
+        color=node_colors  # Each node gets a unique color
+    ),
+    link=dict(
+        source=source_indices,
+        target=[2, 2, 1, 1, 0, 0, 3, 3, 3, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 18, 18, 18, 18, 18,
+                19, 19, 19, 19, 19, 17, 17, 17, 17, 17, 30, 31, 32],
+        value=[
+            selling_price_fiery_guacamole,
+            fiery_monthly_demand,
+            kid_monthly_demand,
+            selling_price_kid_guacamole,
+            selling_price_thai_guacamole,
+            thai_monthly_demand,
+            monthly_revenue_thai_guacamole,
+            monthly_revenue_kid_guacamole,
+            monthly_revenue_fiery_guacamole,
+            total_cost,
+            profit,
+            total_variable_cost,
+            total_fixed_cost,
+            total_ingredients_cost,
+            rent,
+            salary,
+            fiery_guacamole_monthly_ingredient_cost,
+            thai_guacamole_monthly_ingredient_cost,
+            kid_guacamole_monthly_ingredient_cost,
+            avocado_thai_cost,
+            lime_thai_cost,
+            red_chili_thai_cost,
+            onion_thai_cost,
+            coriander_thai_cost,
+            avocado_kid_cost,
+            lime_kid_cost,
+            mayonnaise_kid_cost,
+            tomato_kid_cost,
+            garlic_kid_cost,
+            avocado_fiery_cost,
+            lime_fiery_cost,
+            jalapeno_fiery_cost,
+            onion_fiery_cost,
+            tobasco_fiery_cost,
+            monthly_cooking_cost_tg,
+            monthly_cooking_cost_kfg,
+            monthly_cooking_cost_fg
+        ],
+        color=link_colors  # Link color matches the source node color
+    )
+)])
+
+fig.update_layout(title_text="Calculation Flow", font_size=14, font_color='white')
+st.plotly_chart(fig)
