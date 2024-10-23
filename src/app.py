@@ -1,10 +1,12 @@
+import graphviz
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import os
 import random
-from graphviz import Digraph
+import networkx as nx
+import matplotlib.pyplot as plt
 
 def display_ingredient_cost(ingredient_quantity, ingredient_cost, ingredient_name, unit):
     ingredient_cost_recipe = float(ingredient_quantity) * float(ingredient_cost.replace(',', '.'))
@@ -872,118 +874,218 @@ with col3:
 # Add a divier
 st.divider()
 
-# BE analysis
+# Calculation flow
 st.markdown("<h2 style='text-align: center;'>Calculation Flow</h2>", unsafe_allow_html=True)
+graph = graphviz.Digraph()
 
-# Calculations
-be_tg_units = df_thai_be['BE Units'].mean()
-be_kfg_units = df_thai_kfg['BE Units'].mean()
-be_fg_units = df_thai_fg['BE Units'].mean()
+# Revenue
+with graph.subgraph(name = 'Revenue'):
+    graph.node('TG Monthly Revenue', label=f'TG Monthly Revenue: {monthly_revenue_thai_guacamole}', shape='ellipse', style='filled',
+               fillcolor='green')
+    graph.node('KFG Monthly Revenue', label=f'KFG Monthly Revenue: {monthly_revenue_kid_guacamole}', shape='ellipse', style='filled',
+               fillcolor='green')
+    graph.node('FG Monthly Revenue', label=f'FG Monthly Revenue: {monthly_revenue_fiery_guacamole}', shape='ellipse', style='filled',
+               fillcolor='green')
+    graph.node('Total Revenue', label=f'Total Revenue: {total_monthly_revenue}', shape='ellipse', style='filled',
+               fillcolor='green')
 
-def random_color():
-    """Generate a random color in RGBA format."""
-    return f'rgba({random.randint(0, 255)}, {random.randint(0, 255)}, {random.randint(0, 255)}, 0.5)'
+    graph.edge('Selling Price TG', 'TG Monthly Revenue', label=str(selling_price_thai_guacamole), color='green')
+    graph.edge('Monthly Demand TG', 'TG Monthly Revenue', label=str(thai_monthly_demand), color='green')
+    graph.edge('Selling Price KFG', 'KFG Monthly Revenue', label=str(selling_price_kid_guacamole), color='green')
+    graph.edge('Monthly Demand KFG', 'KFG Monthly Revenue', label=str(kid_monthly_demand), color='green')
+    graph.edge('Selling Price FG', 'FG Monthly Revenue', label=str(selling_price_fiery_guacamole), color='green')
+    graph.edge('Monthly Demand FG', 'FG Monthly Revenue', label=str(fiery_monthly_demand), color='green')
+    graph.edge('TG Monthly Revenue', 'Total Revenue', label=str(monthly_revenue_thai_guacamole), color='green')
+    graph.edge('KFG Monthly Revenue', 'Total Revenue', label=str(monthly_revenue_kid_guacamole), color='green')
+    graph.edge('FG Monthly Revenue', 'Total Revenue', label=str(monthly_revenue_fiery_guacamole), color='green')
 
-# Create random colors for nodes
-node_colors = [random_color() for _ in range(60)]  # Adjusted to 20 nodes
+# TG Ingredients Cost
+with graph.subgraph(name = 'TG Ingredients Cost'):
+    graph.node('TG Monthly Ingredients Cost', label=f'TG Monthly Ingredients Cost: {thai_guacamole_monthly_ingredient_cost}', shape='ellipse', style='filled',
+               fillcolor='lightcoral')
 
-# Generate link colors based on their source node color
-source_indices = [9, 6, 5, 8, 7, 4, 0, 1, 2, 3, 3, 10, 10, 10, 13, 13, 14, 14, 14, 20, 21, 22, 23, 24,
-                  20, 21, 25, 26, 27, 20, 21, 28, 23, 29, 12, 12, 12]
-link_colors = [node_colors[source] for source in source_indices]
+    graph.edge('Avocado', 'TG Monthly Ingredients Cost', label=str(round(avocado_thai_cost * thai_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Lime', 'TG Monthly Ingredients Cost', label=str(round(lime_thai_cost * thai_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Red Chilli', 'TG Monthly Ingredients Cost', label=str(round(red_chili_thai_cost * thai_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Onion', 'TG Monthly Ingredients Cost', label=str(round(onion_thai_cost * thai_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Coriander', 'TG Monthly Ingredients Cost', label=str(round(coriander_thai_cost * thai_monthly_demand, 2)), color='lightcoral')
 
-# Create the Sankey diagram
-fig = go.Figure(data=[go.Sankey(
-    node=dict(
-        pad=15,
-        thickness=20,
-        line=dict(color="black", width=0.5),
-        label=[
-            'TG Revenue',  # 0
-            'KFG Revenue',  # 1
-            'FG Revenue',  # 2
-            'Total Revenue',  # 3
-            'TG Demand',  # 4
-            'KFG Demand',  # 5
-            'FG Demand',  # 6
-            'TG Selling Price',  # 7
-            'KFG Selling Price',  # 8
-            'FG Selling Price',  # 9
-            'Total Cost',  # 10
-            'Profit',  # 11
-            'Variable Cost',  # 12
-            'Fixed Cost',  # 13
-            'Ingredients Cost',  # 14
-            'Rent',  # 15
-            'Salary',  # 16
-            'FG Ingredients Cost',  # 17
-            'TG Ingredients Cost',  # 18
-            'KFG Ingredients Cost',  # 19
-            'Avocado', # 20
-            'Lime', # 21
-            'Red Chilli', # 22
-            'Onion', # 23
-            'Coriander', # 24
-            'Mayonnaise', # 25
-            'Tomato', # 26
-            'Garlic', # 27
-            'Jalapenos', # 28
-            'Tobasco', # 29
-            'TG Cooking Cost', # 30
-            'KFG Cooking Cost', # 31
-            'FG Cooking Cost', # 32
-            'TG BE Units', # 33
-            'KFG BE Units', # 34
-            'FG BE Units' # 35
-        ],
-        color=node_colors  # Each node gets a unique color
-    ),
-    link=dict(
-        source=source_indices,
-        target=[2, 2, 1, 1, 0, 0, 3, 3, 3, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 18, 18, 18, 18, 18,
-                19, 19, 19, 19, 19, 17, 17, 17, 17, 17, 30, 31, 32],
-        value=[
-            selling_price_fiery_guacamole,
-            fiery_monthly_demand,
-            kid_monthly_demand,
-            selling_price_kid_guacamole,
-            selling_price_thai_guacamole,
-            thai_monthly_demand,
-            monthly_revenue_thai_guacamole,
-            monthly_revenue_kid_guacamole,
-            monthly_revenue_fiery_guacamole,
-            total_cost,
-            profit,
-            total_variable_cost,
-            total_fixed_cost,
-            total_ingredients_cost,
-            rent,
-            salary,
-            fiery_guacamole_monthly_ingredient_cost,
-            thai_guacamole_monthly_ingredient_cost,
-            kid_guacamole_monthly_ingredient_cost,
-            avocado_thai_cost,
-            lime_thai_cost,
-            red_chili_thai_cost,
-            onion_thai_cost,
-            coriander_thai_cost,
-            avocado_kid_cost,
-            lime_kid_cost,
-            mayonnaise_kid_cost,
-            tomato_kid_cost,
-            garlic_kid_cost,
-            avocado_fiery_cost,
-            lime_fiery_cost,
-            jalapeno_fiery_cost,
-            onion_fiery_cost,
-            tobasco_fiery_cost,
-            monthly_cooking_cost_tg,
-            monthly_cooking_cost_kfg,
-            monthly_cooking_cost_fg
-        ],
-        color=link_colors  # Link color matches the source node color
-    )
-)])
+# KFG Ingredients Cost
+with graph.subgraph(name = 'KFG Ingredients Cost'):
+    graph.node('KFG Monthly Ingredients Cost', label=f'KFG Monthly Ingredients Cost: {kid_guacamole_monthly_ingredient_cost}', shape='ellipse', style='filled',
+               fillcolor='lightcoral')
 
-fig.update_layout(title_text="Calculation Flow", font_size=14, font_color='white')
-st.plotly_chart(fig)
+    graph.edge('Avocado', 'KFG Monthly Ingredients Cost', label=str(round(avocado_kid_cost * kid_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Lime', 'KFG Monthly Ingredients Cost', label=str(round(lime_kid_cost * kid_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Mayonnaise', 'KFG Monthly Ingredients Cost', label=str(round(mayonnaise_kid_cost * kid_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Tomato', 'KFG Monthly Ingredients Cost', label=str(round(tomato_kid_cost * kid_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Garlic', 'KFG Monthly Ingredients Cost', label=str(round(garlic_kid_cost * kid_monthly_demand, 2)), color='lightcoral')
+
+# FG Ingredients Cost
+with graph.subgraph(name = 'FG Ingredients Cost'):
+    graph.node('FG Monthly Ingredients Cost', label=f'FG Monthly Ingredients Cost: {fiery_guacamole_monthly_ingredient_cost}', shape='ellipse', style='filled', fillcolor='lightcoral')
+
+    graph.edge('Avocado', 'FG Monthly Ingredients Cost', label=str(round(avocado_fiery_cost * fiery_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Lime', 'FG Monthly Ingredients Cost', label=str(round(lime_fiery_cost * fiery_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Jalapenos', 'FG Monthly Ingredients Cost', label=str(round(jalapeno_fiery_cost * fiery_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Onion', 'FG Monthly Ingredients Cost', label=str(round(onion_fiery_cost * fiery_monthly_demand, 2)), color='lightcoral')
+    graph.edge('Tobasco', 'FG Monthly Ingredients Cost', label=str(round(tobasco_fiery_cost * fiery_monthly_demand, 2)), color='lightcoral')
+
+# Total Monthly Ingredients Cost
+with graph.subgraph(name = 'Total Monthly Ingredients Cost'):
+    graph.node('Total Monthly Ingredients Cost', label=f'Total Monthly Ingredients Cost: {total_ingredients_cost}', shape='ellipse', style='filled',
+               fillcolor='lightcoral')
+
+    graph.edge('TG Monthly Ingredients Cost', 'Total Monthly Ingredients Cost', label=str(round(thai_guacamole_monthly_ingredient_cost, 2)),
+               color='lightcoral')
+    graph.edge('KFG Monthly Ingredients Cost', 'Total Monthly Ingredients Cost', label=str(round(kid_guacamole_monthly_ingredient_cost, 2)),
+               color='lightcoral')
+    graph.edge('FG Monthly Ingredients Cost', 'Total Monthly Ingredients Cost', label=str(round(fiery_guacamole_monthly_ingredient_cost, 2)),
+               color='lightcoral')
+
+# Fixed Cost
+with graph.subgraph(name = 'Fixed Cost'):
+    graph.node('Fixed Cost', label=f'Fixed Cost: {total_fixed_cost}', shape='ellipse', style='filled', fillcolor='lightcoral')
+
+    graph.edge('Rent', 'Fixed Cost', label=str(rent), color='lightcoral')
+    graph.edge('Salary', 'Fixed Cost', label=str(salary), color='lightcoral')
+
+# Variable Cost
+with graph.subgraph(name = 'Variable Cost'):
+    total_monthly_cooking_time = round(monthly_cooking_time_tg + monthly_cooking_time_kfg + monthly_cooking_time_fg, 2)
+    total_monthly_cooking_cost = round(monthly_cooking_cost_tg + monthly_cooking_cost_kfg + monthly_cooking_cost_fg, 2)
+
+    graph.node('Total Monthly Variable Cost', label=f'Total Monthly Variable Cost: {total_monthly_cooking_cost}', shape='ellipse', style='filled',
+               fillcolor='lightcoral')
+    graph.node('TG Monthly Cooking Cost', label=f'TG Monthly Cooking Cost: {monthly_cooking_cost_tg}', shape='ellipse', style='filled',
+               fillcolor='lightcoral')
+    graph.node('KFG Monthly Cooking Cost', label=f'KFG Monthly Cooking Cost: {monthly_cooking_cost_kfg}', shape='ellipse', style='filled',
+               fillcolor='lightcoral')
+    graph.node('FG Monthly Cooking Cost', label=f'FG Monthly Cooking Cost: {monthly_cooking_cost_fg}', shape='ellipse', style='filled',
+               fillcolor='lightcoral')
+
+    graph.edge('TG Monthly Cooking Time', 'TG Monthly Cooking Cost', label=str(round(monthly_cooking_time_tg, 2)),
+               color='gray')
+    graph.edge('KFG Monthly Cooking Time', 'KFG Monthly Cooking Cost', label=str(round(monthly_cooking_time_kfg, 2)),
+               color='gray')
+    graph.edge('FG Monthly Cooking Time', 'FG Monthly Cooking Cost', label=str(round(monthly_cooking_time_fg, 2)),
+               color='gray')
+    graph.edge('Variable Food Salary', 'TG Monthly Cooking Cost', label=str(round(variable_salary, 2)),
+               color='lightcoral')
+    graph.edge('Variable Food Salary', 'KFG Monthly Cooking Cost', label=str(round(variable_salary, 2)),
+               color='lightcoral')
+    graph.edge('Variable Food Salary', 'FG Monthly Cooking Cost', label=str(round(variable_salary, 2)),
+               color='lightcoral')
+    graph.edge('Variable Food Energy Cost', 'TG Monthly Cooking Cost', label=str(round(variable_energy, 2)),
+               color='lightcoral')
+    graph.edge('Variable Food Energy Cost', 'KFG Monthly Cooking Cost', label=str(round(variable_energy, 2)),
+               color='lightcoral')
+    graph.edge('Variable Food Energy Cost', 'FG Monthly Cooking Cost', label=str(round(variable_energy, 2)),
+               color='lightcoral')
+    graph.edge('Variable Food Other Costs', 'TG Monthly Cooking Cost', label=str(round(variable_other, 2)),
+               color='lightcoral')
+    graph.edge('Variable Food Other Costs', 'KFG Monthly Cooking Cost', label=str(round(variable_other, 2)),
+               color='lightcoral')
+    graph.edge('Variable Food Other Costs', 'FG Monthly Cooking Cost', label=str(round(variable_other, 2)),
+               color='lightcoral')
+    graph.edge('TG Monthly Cooking Cost', 'Total Monthly Variable Cost', label=str(round(monthly_cooking_cost_tg, 2)),
+               color='lightcoral')
+    graph.edge('KFG Monthly Cooking Cost', 'Total Monthly Variable Cost', label=str(round(monthly_cooking_cost_kfg, 2)),
+               color='lightcoral')
+    graph.edge('FG Monthly Cooking Cost', 'Total Monthly Variable Cost', label=str(round(monthly_cooking_cost_fg, 2)),
+               color='lightcoral')
+
+# Total Cost
+with graph.subgraph(name = 'Total Cost'):
+    graph.node('Total Monthly Cost', label=f'Total Monthly Cost: {total_cost}', shape='ellipse', style='filled',
+               fillcolor='lightcoral')
+
+    graph.edge('Fixed Cost', 'Total Monthly Cost', label=str(round(total_fixed_cost, 2)),
+               color='lightcoral')
+    graph.edge('Total Monthly Variable Cost', 'Total Monthly Cost', label=str(round(total_variable_cost, 2)),
+               color='lightcoral')
+    graph.edge('Total Monthly Ingredients Cost', 'Total Monthly Cost', label=str(round(total_ingredients_cost, 2)),
+               color='lightcoral')
+
+# Profit
+with graph.subgraph(name = 'Profit'):
+    graph.node('Profit', label=f'Profit: {profit}', shape='ellipse', style='filled',
+               fillcolor='orange')
+
+    graph.edge('Total Revenue', 'Profit', label=str(round(total_monthly_revenue, 2)),
+               color='green')
+    graph.edge('Total Monthly Cost', 'Profit', label=f'-{total_cost}',
+               color='lightcoral')
+
+# TG BE
+with graph.subgraph(name = 'TG BE'):
+    be_tg_units = round(df_thai_be['BE Units'].mean(), 0)
+    tg_avg_vc = round(total_variable_cost/3/thai_monthly_demand, 2)
+    tg_avg_fc = round(total_fixed_cost/3, 2)
+
+    graph.node('TG BE Units', label=f'TG BE Units: {be_tg_units}', shape='ellipse', style='filled',
+               fillcolor='lightblue')
+    graph.node('Avg. TG Unit Variable Cost', label=f'Avg. TG Unit Variable Cost: {tg_avg_vc}', shape='ellipse', style='filled',
+               fillcolor='lightblue')
+    graph.node('Avg. TG Fixed Cost', label=f'Avg. TG Fixed Cost: {tg_avg_fc}', shape='ellipse', style='filled',
+               fillcolor='lightblue')
+
+    graph.edge('Total Monthly Variable Cost', 'Avg. TG Unit Variable Cost', color='lightblue')
+    graph.edge('Monthly Demand TG', 'Avg. TG Unit Variable Cost', color='lightblue')
+    graph.edge('Fixed Cost', 'Avg. TG Fixed Cost', color='lightblue')
+    graph.edge('Avg. TG Fixed Cost', 'TG BE Units', label=str(round(tg_avg_fc, 2)),
+               color='lightblue')
+    graph.edge('Avg. TG Unit Variable Cost', 'TG BE Units', label=str(round(tg_avg_vc, 2)),
+               color='lightblue')
+    graph.edge('Selling Price TG', 'TG BE Units', label=str(round(selling_price_thai_guacamole, 2)),
+               color='lightblue')
+
+# kFG BE
+with graph.subgraph(name = 'KFG BE'):
+    be_kfg_units = round(df_thai_kfg['BE Units'].mean(), 0)
+    kfg_avg_vc = round(total_variable_cost/3/kid_monthly_demand, 2)
+    kfg_avg_fc = round(total_fixed_cost/3, 2)
+
+    graph.node('KFG BE Units', label=f'KFG BE Units: {be_kfg_units}', shape='ellipse', style='filled',
+               fillcolor='lightblue')
+    graph.node('Avg. KFG Unit Variable Cost', label=f'Avg. KFG Unit Variable Cost: {kfg_avg_vc}', shape='ellipse', style='filled',
+               fillcolor='lightblue')
+    graph.node('Avg. KFG Fixed Cost', label=f'Avg. KFG Fixed Cost: {kfg_avg_fc}', shape='ellipse', style='filled',
+               fillcolor='lightblue')
+
+    graph.edge('Total Monthly Variable Cost', 'Avg. KFG Unit Variable Cost', color='lightblue')
+    graph.edge('Monthly Demand KFG', 'Avg. KFG Unit Variable Cost', color='lightblue')
+    graph.edge('Fixed Cost', 'Avg. KFG Fixed Cost', color='lightblue')
+    graph.edge('Avg. KFG Fixed Cost', 'KFG BE Units', label=str(round(kfg_avg_fc, 2)),
+               color='lightblue')
+    graph.edge('Avg. KFG Unit Variable Cost', 'KFG BE Units', label=str(round(kfg_avg_vc, 2)),
+               color='lightblue')
+    graph.edge('Selling Price KFG', 'KFG BE Units', label=str(round(selling_price_kid_guacamole, 2)),
+               color='lightblue')
+
+# FG BE
+with graph.subgraph(name = 'FG BE'):
+    be_fg_units = round(df_thai_fg['BE Units'].mean(), 0)
+    fg_avg_vc = round(total_variable_cost/3/fiery_monthly_demand, 2)
+    fg_avg_fc = round(total_fixed_cost/3, 2)
+
+    graph.node('FG BE Units', label=f'FG BE Units: {be_fg_units}', shape='ellipse', style='filled',
+               fillcolor='lightblue')
+    graph.node('Avg. FG Unit Variable Cost', label=f'Avg. FG Unit Variable Cost: {fg_avg_vc}', shape='ellipse', style='filled',
+               fillcolor='lightblue')
+    graph.node('Avg. FG Fixed Cost', label=f'Avg. FG Fixed Cost: {fg_avg_fc}', shape='ellipse', style='filled',
+               fillcolor='lightblue')
+
+    graph.edge('Total Monthly Variable Cost', 'Avg. FG Unit Variable Cost', color='lightblue')
+    graph.edge('Monthly Demand FG', 'Avg. FG Unit Variable Cost', color='lightblue')
+    graph.edge('Fixed Cost', 'Avg. FG Fixed Cost', color='lightblue')
+    graph.edge('Avg. FG Fixed Cost', 'FG BE Units', label=str(round(fg_avg_fc, 2)),
+               color='lightblue')
+    graph.edge('Avg. FG Unit Variable Cost', 'FG BE Units', label=str(round(fg_avg_vc, 2)),
+               color='lightblue')
+    graph.edge('Selling Price FG', 'FG BE Units', label=str(round(selling_price_fiery_guacamole, 2)),
+               color='lightblue')
+
+# Display the graph
+graph.attr(rankdir='LR')  # Change layout direction to left-to-right
+st.graphviz_chart(graph)
